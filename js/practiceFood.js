@@ -225,10 +225,22 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: data
+        });
+
+        return res.json();
+    };
+
+    function bindPostData(form) {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
 
@@ -242,19 +254,9 @@ window.addEventListener("DOMContentLoaded", () => {
             
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function(value, key) {
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch("server.php", { // promise after fetch will not fail even if there is http error
-                method: "POST",
-                headers: {
-                    "content-type": "application/json"
-                },
-                body: JSON.stringify(object)
-            })
-            .then(data => data.text())
+            postData("http://localhost:3000/requests", json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
