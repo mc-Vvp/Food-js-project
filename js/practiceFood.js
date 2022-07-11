@@ -293,41 +293,45 @@ window.addEventListener("DOMContentLoaded", () => {
           prevSlide = document.querySelector(".offer__slider-prev"),
           slides = document.querySelectorAll(".offer__slide"),
           currentSlideNum = document.getElementById("current"),
-          totalSlidesNum = document.getElementById("total");
+          totalSlidesNum = document.getElementById("total"),
+          slidesWrapper = document.querySelector(".offer__slider-wrapper"),
+          slidesField = document.querySelector(".offer__slider-inner"),
+          width = window.getComputedStyle(slidesWrapper).width;
 
     let slidenum = 1;
-    totalSlidesNum.textContent = getZero(slides.length);
-    
+    let offset = 0;
+
+    slidesField.style.width = 100 * slides.length + "%";
+    slidesField.style.display = "flex";
+    slidesField.style.transition = "0.5s all";
+
+    slidesWrapper.style.overflow = "hidden";
+
+    slides.forEach(slide => {
+        slide.style.width = width;
+    });
+
+    nextSlide.addEventListener("click", () => {
+        offset == +width.slice(0, width.length-2) * (slides.length - 1) ? offset = 0 : offset += +width.slice(0, width.length-2);
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        slidenum == slides.length ? slidenum = 1 : slidenum++;
+        updateSLideNum(slidenum);
+    });
+
+    prevSlide.addEventListener("click", () => {
+        offset == 0 ? offset = +width.slice(0, width.length-2) * (slides.length - 1) : offset -= +width.slice(0, width.length-2);
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        slidenum === 1 ? slidenum = slides.length : slidenum--;
+        updateSLideNum(slidenum);
+    });
+
     function updateSLideNum(i) {
         currentSlideNum.textContent = getZero(i);
     }
 
-    function hideSLides() {
-        slides.forEach(slide => {
-            slide.classList.add("hide");
-        });
-    }
-
-    function showCurrentSLide(i = 0) {
-        slides[i].classList.remove("hide");
-        slides[i].classList.add("show");
-    }
-
-    nextSlide.addEventListener("click", event => {
-        slidenum === slides.length ? slidenum = 1 : slidenum++;
-        updateSLideNum(slidenum);
-        hideSLides();
-        showCurrentSLide(slidenum-1);
-    });
-
-    prevSlide.addEventListener("click", event => {
-        slidenum === 1 ? slidenum = slides.length : slidenum--;
-        updateSLideNum(slidenum);
-        hideSLides();
-        showCurrentSLide(slidenum-1);
-    });
-
-    hideSLides();
-    showCurrentSLide();
+    totalSlidesNum.textContent = getZero(slides.length);
     updateSLideNum(slidenum);
+
 });
