@@ -287,4 +287,47 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     }
 
+
+    // SLIDER
+    const nextSlide = document.querySelector(".offer__slider-next"),
+          prevSlide = document.querySelector(".offer__slider-prev"),
+          slides = document.querySelectorAll(".offer__slide"),
+          currentSlideNum = document.getElementById("current"),
+          totalSlidesNum = document.getElementById("total");
+
+    let slidenum = 1;
+    totalSlidesNum.textContent = getZero(slides.length);
+    
+    function updateSLideNum(i) {
+        currentSlideNum.textContent = getZero(i);
+    }
+
+    function hideSLides() {
+        slides.forEach(slide => {
+            slide.classList.add("hide");
+        });
+    }
+
+    function showCurrentSLide(i = 0) {
+        slides[i].classList.remove("hide");
+        slides[i].classList.add("show");
+    }
+
+    nextSlide.addEventListener("click", event => {
+        slidenum === slides.length ? slidenum = 1 : slidenum++;
+        updateSLideNum(slidenum);
+        hideSLides();
+        showCurrentSLide(slidenum-1);
+    });
+
+    prevSlide.addEventListener("click", event => {
+        slidenum === 1 ? slidenum = slides.length : slidenum--;
+        updateSLideNum(slidenum);
+        hideSLides();
+        showCurrentSLide(slidenum-1);
+    });
+
+    hideSLides();
+    showCurrentSLide();
+    updateSLideNum(slidenum);
 });
