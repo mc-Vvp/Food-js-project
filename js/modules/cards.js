@@ -1,3 +1,5 @@
+import {getResources} from "../services/services";
+
 function cards() {
     // CREATE CLASSES FOR CARDS
     class menuCard {
@@ -39,27 +41,12 @@ function cards() {
         }
     }
 
-    const getResources = async (url) => {
-        const res = await fetch(url);
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`); //trow error if request is mot ok (because fetch only vount error if no connection)
-        }
-        return await res.json();
-    };
-
-    /* getResources("http://localhost:3000/menu")
+    getResources("http://localhost:3000/menu")
         .then(data => {
             data.forEach(({img, altimg, title, descr, price}) => {
                 new menuCard(img, altimg, title, descr, price, ".menu .container").render();
             });
-        }); */
-
-    axios.get("http://localhost:3000/menu")
-            .then(data => {
-                data.data.forEach(({img, altimg, title, descr, price}) => {
-                    new menuCard(img, altimg, title, descr, price, ".menu .container").render();
-                });
-            });
+        });
 }
 
-module.exports = cards;
+export default cards;

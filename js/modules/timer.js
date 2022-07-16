@@ -1,6 +1,15 @@
-function timer() {
+function getZero(num) {
+    if (num >= 0 && num < 10) {
+        return `0${num}`;
+    } else if (num < 0) {
+        return "00";
+    } else {
+        return num;
+    }
+}
+
+function timer(id, deadLine) {
     // TIMER
-    const deadLine = "2022-09-22 00:00";
 
     function getTimeRemainig(endtime) {
         const remainTime = Date.parse(endtime) - Date.parse(new Date()),
@@ -16,16 +25,6 @@ function timer() {
             "minutes": remainMinutes,
             "seconds": remainSec
         };
-    }
-
-    function getZero(num) {
-        if (num >= 0 && num < 10) {
-            return `0${num}`;
-        } else if (num < 0) {
-            return "00";
-        } else {
-            return num;
-        }
     }
 
     function setClock(selector, endtime) {
@@ -52,7 +51,8 @@ function timer() {
         }
     }
 
-    setClock(".timer", deadLine);
+    setClock(id, deadLine);
 }
 
-module.exports = timer;
+export default timer;
+export {getZero};
